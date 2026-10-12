@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bad-probe-demo
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bad-probe-demo
+  template:
+    metadata:
+      labels:
+        app: bad-probe-demo
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 2

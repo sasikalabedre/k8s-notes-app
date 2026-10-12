@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: notes-heartbeat
+  namespace: notes-app
+spec:
+  schedule: "*/2 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: heartbeat
+            image: postgres:16
+            env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: notes-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: notes-config
+                  key: POSTGRES_USER
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notes-secret
+                  key: POSTGRES_PASSWORD
+            command: ["sh", "-c"]
+            args:
+            - |
+              psql -h notes-db -U $POSTGRES_USER -d $POSTGRES_DB -c "INSERT INTO notes (text) VALUES ('heartbeat at $(date)');"
+              psql -h notes-db -U $POSTGRES_USER -d $POSTGRES_DB -c "SELECT count(*) FROM notes;"

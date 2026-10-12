@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-web-lb
+  namespace: notes-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: notes-web
+  ports:
+  - port: 8080
+    targetPort: 80

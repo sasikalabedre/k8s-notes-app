@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notes-config
+  namespace: notes-app
+data:
+  APP_ENV: "minikube"
+  LOG_LEVEL: "info"
+  POSTGRES_DB: "notesdb"
+  POSTGRES_USER: "notesuser"
+  index.html: |
+    <h1>Notes App - version 1</h1>
+    <p>Running on Kubernetes (minikube)</p>
