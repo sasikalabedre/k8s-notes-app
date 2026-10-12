@@ -55,3 +55,19 @@ For the LoadBalancer IP, keep `minikube tunnel` running in another terminal.
 ## Clean up
 
     kubectl delete namespace notes-app
+
+## Screenshots
+
+### configsecrets
+
+### everythingworking
+
+### loadbalancer
+
+### nodes
+
+### rollingupdate
+
+### servicelist
+
+### workload
